@@ -16,8 +16,8 @@ public class HdfsClientDemo {
         conf.set("dfs.replication", "1");
         conf.set("dfs.blocksize", "64m");
         conf.set("fs.hdfs.impl", "org.apache.hadoop.hdfs.DistributedFileSystem");
-        FileSystem fs = FileSystem.get(new URI("hdfs://localhost:9000/"), conf, "root");
-        fs.copyFromLocalFile(new Path("/Users/wangcong/SourceCode/Test.zip"), new Path("/"));
+        FileSystem fs = FileSystem.get(new URI("hdfs://localhost:9000"), conf, "wingc");
+        fs.copyFromLocalFile(new Path("/home/wingc/Untitled.ipynb"), new Path("/"));
         fs.close();
     }
 }
