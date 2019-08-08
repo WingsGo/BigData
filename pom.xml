@@ -11,6 +11,10 @@
     <modules>
         <module>logger</module>
         <module>hdfsclient</module>
+        <module>datacollect</module>
+        <module>data-collect</module>
+        <module>data-collect</module>
+        <module>datacollect</module>
     </modules>
 
 
