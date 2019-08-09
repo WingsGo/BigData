@@ -94,7 +94,8 @@ public class HdfsClientDemo {
         FileInputStream in = new FileInputStream("/test.txt");
         byte[] buffer = new byte[1024];
         int read = 0;
-        while ((read = in.read(buffer)) != 0) {
+        while ((read = in.read(buffer)) != -1) {
+            String tmp = new String(buffer);
             out.write(buffer, 0, read);
         }
 
