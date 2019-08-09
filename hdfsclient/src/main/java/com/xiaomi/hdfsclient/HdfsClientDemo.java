@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -33,13 +34,14 @@ public class HdfsClientDemo {
         }
     }
 
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws IOException {
         HdfsClientDemo demo = new HdfsClientDemo();
 //        demo.testCopy();
 //        demo.testRename();
 //        demo.testMkdir();
 //        demo.testLs();
-        demo.testReadData();
+//        demo.testReadData();
+        demo.testWriteData();
         fs.close();
     }
 
@@ -57,7 +59,7 @@ public class HdfsClientDemo {
 
     private void testLs() throws IOException {
         RemoteIterator<LocatedFileStatus> iter = fs.listFiles(new Path("/"), true);
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             LocatedFileStatus status = iter.next();
             System.out.println("块大小: " + status.getBlockSize());
             System.out.println("文件长度: " + status.getLen());
@@ -85,5 +87,18 @@ public class HdfsClientDemo {
         reader.close();
         in.close();
         fs.close();
+    }
+
+    public void testWriteData() throws IOException {
+        FSDataOutputStream out = fs.create(new Path("/test.dat"), true);
+        FileInputStream in = new FileInputStream("/test.txt");
+        byte[] buffer = new byte[1024];
+        int read = 0;
+        while ((read = in.read(buffer)) != 0) {
+            out.write(buffer, 0, read);
+        }
+
+        in.close();
+        out.close();
     }
 }
