@@ -91,7 +91,7 @@ public class HdfsClientDemo {
 
     public void testWriteData() throws IOException {
         FSDataOutputStream out = fs.create(new Path("/test.dat"), true);
-        FileInputStream in = new FileInputStream("/test.txt");
+        FileInputStream in = new FileInputStream("/home/wingc/test.txt");
         byte[] buffer = new byte[1024];
         int read = 0;
         while ((read = in.read(buffer)) != -1) {
