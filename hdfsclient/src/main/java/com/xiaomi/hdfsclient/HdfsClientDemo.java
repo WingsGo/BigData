@@ -2,11 +2,14 @@ package com.xiaomi.hdfsclient;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.RemoteIterator;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 
 public class HdfsClientDemo {
@@ -36,6 +39,7 @@ public class HdfsClientDemo {
         demo.testCopy();
         demo.testRename();
         demo.testMkdir();
+        demo.testLs();
         fs.close();
     }
 
@@ -49,6 +53,18 @@ public class HdfsClientDemo {
 
     private void testMkdir() throws IOException {
         fs.mkdirs(new Path("/test_mkdir_parent/test_mkdir"));
+    }
+
+    private void testLs() throws IOException {
+        RemoteIterator<LocatedFileStatus> iter = fs.listFiles(new Path("/"), true);
+        while(iter.hasNext()) {
+            LocatedFileStatus status = iter.next();
+            System.out.println("块大小: " + status.getBlockSize());
+            System.out.println("文件长度: " + status.getLen());
+            System.out.println("副本数量: " + status.getReplication());
+            System.out.println("块信息: " + Arrays.toString(status.getBlockLocations()));
+            System.out.println("=============================================");
+        }
     }
 
 }

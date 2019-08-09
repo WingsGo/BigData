@@ -21,12 +21,12 @@ public class DataCollect {
             @Override
             public void run() {
                 try {
-                    ConfigHolder config = ConfigHolder.getInstance();
+                    //ConfigHolder config = ConfigHolder.getInstance();
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH");
                     String day = sdf.format(new Date());
 
-                    File srcDir = new File(config.getProperty(Constants.LOG_SOURCE_DIR));
+                    File srcDir = new File(Constants.LOG_SOURCE_DIR);
 
                     File[] listFiles = srcDir.listFiles(new FilenameFilter() {
                         @Override
@@ -58,7 +58,7 @@ public class DataCollect {
                     }
 
                     for (File file : toUploadFiles) {
-                        Path dstPath = new Path(hdfsDstPath + "/" + UUID.randomUUID() + Constants.HDFS_FILE_SUFFIX);
+                        Path dstPath = new Path(hdfsDstPath + Constants.HDFS_FILE_PREFIX + "/" + UUID.randomUUID() + Constants.HDFS_FILE_SUFFIX);
                         fs.copyFromLocalFile(new Path(file.getAbsolutePath()), dstPath);
                         logger.info("文件传输到hdfs完成: " + toUploadDir.getAbsolutePath() + "-->" + dstPath);
                         FileUtils.moveFileToDirectory(file, backupDir, true);
