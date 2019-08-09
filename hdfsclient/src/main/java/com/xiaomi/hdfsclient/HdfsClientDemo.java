@@ -1,10 +1,7 @@
 package com.xiaomi.hdfsclient;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.LocatedFileStatus;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.fs.RemoteIterator;
+import org.apache.hadoop.fs.*;
 
 import java.io.IOException;
 import java.net.URI;
@@ -36,10 +33,11 @@ public class HdfsClientDemo {
 
     public static void main(String[] args) throws IOException{
         HdfsClientDemo demo = new HdfsClientDemo();
-        demo.testCopy();
-        demo.testRename();
-        demo.testMkdir();
-        demo.testLs();
+//        demo.testCopy();
+//        demo.testRename();
+//        demo.testMkdir();
+//        demo.testLs();
+        demo.testReadData();
         fs.close();
     }
 
@@ -67,4 +65,12 @@ public class HdfsClientDemo {
         }
     }
 
+    public void testReadData() throws IOException {
+        FSDataInputStream in = fs.open(new Path("/test.txt"));
+        byte[] buffer = new byte[1024];
+        in.read(buffer);
+
+        System.out.println(new String(buffer));
+        in.close();
+    }
 }
