@@ -3,7 +3,9 @@ package com.xiaomi.hdfsclient;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -67,10 +69,19 @@ public class HdfsClientDemo {
 
     public void testReadData() throws IOException {
         FSDataInputStream in = fs.open(new Path("/test.txt"));
-        byte[] buffer = new byte[1024];
-        in.read(buffer);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-        System.out.println(new String(buffer));
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+        reader.close();
         in.close();
+        fs.close();
+
+        in.seek(12);
+        byte[] buffer = new byte[16];
+        in.read(buffer);
+        System.out.println(new String(buffer));
     }
 }
