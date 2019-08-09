@@ -75,13 +75,15 @@ public class HdfsClientDemo {
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
-        reader.close();
-        in.close();
-        fs.close();
 
         in.seek(12);
         byte[] buffer = new byte[16];
         in.read(buffer);
+        System.out.println("==============seek=====================");
         System.out.println(new String(buffer));
+
+        reader.close();
+        in.close();
+        fs.close();
     }
 }
