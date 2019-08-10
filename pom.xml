@@ -13,6 +13,7 @@
         <module>hdfsclient</module>
         <module>datacollect</module>
         <module>datacollect</module>
+        <module>mapreduce</module>
     </modules>
 
     <dependencies>

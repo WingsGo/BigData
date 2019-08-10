@@ -25,11 +25,7 @@ public class HdfsClientDemo {
 
         try {
             HdfsClientDemo.fs = FileSystem.get(new URI("hdfs://localhost:9000"), conf, "wingc");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
+        } catch (IOException | InterruptedException | URISyntaxException e) {
             e.printStackTrace();
         }
     }
