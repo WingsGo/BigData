@@ -2,8 +2,6 @@ package com.xiaomi.hdfsclient;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
-import org.apache.hadoop.mapred.Mapper;
-import sun.jvm.hotspot.oops.ObjectHeap;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -75,7 +73,7 @@ public class HdfsClientDemo {
         FSDataInputStream in = fs.open(new Path("/test.txt"));
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
@@ -95,7 +93,7 @@ public class HdfsClientDemo {
         FSDataOutputStream out = fs.create(new Path("/test.dat"), true);
         FileInputStream in = new FileInputStream("/home/wingc/test.txt");
         byte[] buffer = new byte[1024];
-        int read = 0;
+        int read;
         while ((read = in.read(buffer)) != -1) {
             String tmp = new String(buffer);
             out.write(buffer, 0, read);
@@ -116,15 +114,15 @@ public class HdfsClientDemo {
             LocatedFileStatus file = iter.next();
             FSDataInputStream in = fs.open(file.getPath());
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 mapper.map(line, context);
             }
-            reader.close();
             in.close();
+            reader.close();
         }
 
-        HashMap<Object, Object> contextMap = context.getContextMap();
+        HashMap<Object, Object> contextMap = context.getCountMapper();
         Path outPath = new Path("/word_count/output/res.dat");
         if (!fs.exists(outPath)) {
             fs.mkdirs(outPath);
@@ -132,7 +130,7 @@ public class HdfsClientDemo {
         FSDataOutputStream out = fs.create(new Path("/word_count/output/res.dat"));
         Set<Map.Entry<Object, Object>> entrySet = contextMap.entrySet();
         for (Map.Entry<Object, Object> entry : entrySet) {
-            out.write((entry.getKey().toString() + "\t" + entry.getValue() + "\n").getBytes());
+            out.write((entry.getKey().toString() + ":\t" + entry.getValue().toString() + "\n").getBytes());
         }
         out.close();
         fs.close();

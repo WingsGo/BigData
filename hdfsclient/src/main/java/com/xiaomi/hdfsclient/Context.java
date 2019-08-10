@@ -2,18 +2,17 @@ package com.xiaomi.hdfsclient;
 
 import java.util.HashMap;
 
-public class Context {
-    private HashMap<Object, Object> contextMap = new HashMap<Object, Object>();
-
-    public void write(Object key, Object value) {
-        contextMap.put(key, value);
+class Context {
+    private HashMap<Object, Object> countMapper;
+    Object getCount(Object key) {
+        return countMapper.get(key);
     }
 
-    public Object get(Object key) {
-        return contextMap.get(key);
+    void setCount(Object key, Object value) {
+        countMapper.put(key, value);
     }
 
-    public HashMap<Object, Object> getContextMap() {
-        return contextMap;
+    HashMap<Object, Object> getCountMapper() {
+        return countMapper;
     }
 }

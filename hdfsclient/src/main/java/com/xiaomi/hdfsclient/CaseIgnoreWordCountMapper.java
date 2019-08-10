@@ -5,11 +5,11 @@ public class CaseIgnoreWordCountMapper implements Mapper {
     public void map(String line, Context context) {
         String[] words = line.toUpperCase().split(" ");
         for (String word : words) {
-            Object value = context.get(word);
+            Integer value = (Integer) context.getCount(word);
             if (value == null) {
-                context.write(word, 1);
+                context.setCount(word, 1);
             } else {
-                context.write(word, (Integer)value + 1);
+                context.setCount(word, value + 1);
             }
         }
     }
