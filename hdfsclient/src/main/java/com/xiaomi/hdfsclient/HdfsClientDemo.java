@@ -2,6 +2,8 @@ package com.xiaomi.hdfsclient;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.apache.hadoop.mapred.Mapper;
+import sun.jvm.hotspot.oops.ObjectHeap;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.util.*;
 
 
 public class HdfsClientDemo {
@@ -101,5 +103,39 @@ public class HdfsClientDemo {
 
         in.close();
         out.close();
+    }
+
+    public void testWordCount() throws Exception {
+        Properties properties = new Properties();
+        CaseIgnoreWordCountMapper mapper = new CaseIgnoreWordCountMapper();
+
+        Context context = new Context();
+
+        RemoteIterator<LocatedFileStatus> iter = fs.listFiles(new Path("/word_count/input/"), false);
+        while (iter.hasNext()) {
+            LocatedFileStatus file = iter.next();
+            FSDataInputStream in = fs.open(file.getPath());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                mapper.map(line, context);
+            }
+            reader.close();
+            in.close();
+        }
+
+        HashMap<Object, Object> contextMap = context.getContextMap();
+        Path outPath = new Path("/word_count/output/res.dat");
+        if (!fs.exists(outPath)) {
+            fs.mkdirs(outPath);
+        }
+        FSDataOutputStream out = fs.create(new Path("/word_count/output/res.dat"));
+        Set<Map.Entry<Object, Object>> entrySet = contextMap.entrySet();
+        for (Map.Entry<Object, Object> entry : entrySet) {
+            out.write((entry.getKey().toString() + "\t" + entry.getValue() + "\n").getBytes());
+        }
+        out.close();
+        fs.close();
+        System.out.println("数据统计完成");
     }
 }
