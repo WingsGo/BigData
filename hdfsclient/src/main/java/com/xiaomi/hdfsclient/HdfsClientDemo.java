@@ -34,14 +34,15 @@ public class HdfsClientDemo {
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         HdfsClientDemo demo = new HdfsClientDemo();
 //        demo.testCopy();
 //        demo.testRename();
 //        demo.testMkdir();
 //        demo.testLs();
 //        demo.testReadData();
-        demo.testWriteData();
+//        demo.testWriteData();
+        demo.testWordCount();
         fs.close();
     }
 
@@ -123,11 +124,12 @@ public class HdfsClientDemo {
         }
 
         HashMap<Object, Object> contextMap = context.getCountMapper();
-        Path outPath = new Path("/word_count/output/res.dat");
+        Path outPath = new Path("/word_count/output/");
         if (!fs.exists(outPath)) {
             fs.mkdirs(outPath);
         }
-        FSDataOutputStream out = fs.create(new Path("/word_count/output/res.dat"));
+        Path out_path = new Path("/word_count/output/res.dat");
+        FSDataOutputStream out = fs.create(out_path, true);
         Set<Map.Entry<Object, Object>> entrySet = contextMap.entrySet();
         for (Map.Entry<Object, Object> entry : entrySet) {
             out.write((entry.getKey().toString() + ":\t" + entry.getValue().toString() + "\n").getBytes());
