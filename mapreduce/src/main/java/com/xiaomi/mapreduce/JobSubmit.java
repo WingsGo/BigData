@@ -23,11 +23,18 @@ public class JobSubmit {
         System.setProperty("HADOOP_USER_NAME", "root");
 
         Job job = Job.getInstance(conf);
-
         job.setJar("/home/wingc/wc.jar");
+
+        // for normal word count
         job.setJarByClass(JobSubmit.class);
         job.setMapperClass(WordCountMapper.class);
         job.setReducerClass(WordCountReducer.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(IntWritable.class);
+
+        // for word count by file name
+        job.setMapperClass(IndexStepOne.IndexStepOneMapper.class);
+        job.setReducerClass(IndexStepOne.IndexStepOneReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(IntWritable.class);
 
@@ -39,6 +46,7 @@ public class JobSubmit {
         FileInputFormat.setInputPaths(job, new Path("/word_count/input"));
         FileOutputFormat.setOutputPath(job, new Path("/word_count/output"));
 
+        // 设置文件分发到多少个reducer容器运行
         job.setNumReduceTasks(2);
 
         job.waitForCompletion(true);
