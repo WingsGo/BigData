@@ -1,6 +1,5 @@
 package com.xiaomi.mapreduce;
 
-import com.sun.tools.corba.se.idl.constExpr.Or;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -47,7 +46,7 @@ public class OrderTopN {
 
             Collections.sort(orders);
 
-            for (int i=0; i<3; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 context.write(orders.get(i), NullWritable.get());
             }
         }
