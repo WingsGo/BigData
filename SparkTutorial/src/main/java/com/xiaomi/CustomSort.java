@@ -1,12 +1,8 @@
 package com.xiaomi;
 
-import netscape.security.UserTarget;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import scala.Serializable;
-import scala.Tuple3;
 
 import java.util.Arrays;
 import java.util.List;
