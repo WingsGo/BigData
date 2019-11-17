@@ -158,7 +158,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <!-- 主类方法-->
-                                    <mainClass>com.xiaomi.SparkSQLTutorial</mainClass>
+                                    <mainClass>com.xiaomi.ZKServerTutorial</mainClass>
                                 </transformer>
                             </transformers>
 

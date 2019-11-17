@@ -1,15 +1,14 @@
 package com.xiaomi;
 
-import org.apache.zookeeper.CreateMode;
-import org.apache.zookeeper.KeeperException;
-import org.apache.zookeeper.ZooDefs;
-import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class ZKTutorial {
+
+    private static ZooKeeper zk = null;
 
     private static void testCreate() throws IOException, KeeperException, InterruptedException {
         ZooKeeper zk = new ZooKeeper("10.232.33.211:2181", 2000, watchedEvent -> {
@@ -58,12 +57,34 @@ public class ZKTutorial {
         zk.close();
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException, KeeperException {
-        testCreate();
-        testUpdate();
-        testGet();
-        testListChildren();
-        testDelete();
+    private static void testGetWatch() throws Exception {
+        zk = new ZooKeeper("10.232.33.211:2181", 2000, new Watcher() {
+            @Override
+            public void process(WatchedEvent watchedEvent) {
+                if (watchedEvent.getState() == Event.KeeperState.SyncConnected && watchedEvent.getType() == Event.EventType.NodeDataChanged) {
+                    System.out.println("ZK Update");
+                    System.out.println(watchedEvent.getPath());
+                    System.out.println(watchedEvent.getType());
+                    System.out.println("something wrong, go go go!!!");
+                    try {
+                        zk.getData("/idea", true, null);
+                    } catch (KeeperException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        zk.getData("/idea", true, null);
+        Thread.sleep(Long.MAX_VALUE);
+    }
+
+    public static void main(String[] args) throws Exception {
+        // testCreate();
+        // testUpdate();
+        // testGet();
+        // testListChildren();
+        // testDelete();
+        testGetWatch();
     }
 
 }
